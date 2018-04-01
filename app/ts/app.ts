@@ -1,2 +1,3 @@
-let c = new Negociacao(new Date(), 1, 100);
-console.log(c);
+let negociacaoController = new NegociacaoController();
+
+document.querySelector('.form').addEventListener('submit', negociacaoController.adiciona.bind(negociacaoController));
