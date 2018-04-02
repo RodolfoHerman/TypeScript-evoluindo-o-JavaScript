@@ -1,21 +1,21 @@
 class NegociacaoController {
 
-    private _inputData: HTMLInputElement;
-    private _inputQuantidade: HTMLInputElement;
-    private _inputValor: HTMLInputElement;
+    private _inputData: JQuery;
+    private _inputQuantidade: JQuery;
+    private _inputValor: JQuery;
     private _negociacoes: Negociacoes = new Negociacoes();
     private _negociacoesView: NegociacoesView = new NegociacoesView('#negociacoesView');
     private _mensagemView: MensagemView = new MensagemView('#mensagemView');
 
     constructor() {
 
-        let $ = document.querySelector.bind(document);
+        //let $ = document.querySelector.bind(document);
 
         //Realizando o casting (utilizamos <> para isso) de um elemento 
         //genérico para um elemento mais específico
-        this._inputData = <HTMLInputElement> $('#data');
-        this._inputQuantidade = <HTMLInputElement> $('#quantidade');
-        this._inputValor = <HTMLInputElement> $('#valor');
+        this._inputData = $('#data');
+        this._inputQuantidade = $('#quantidade');
+        this._inputValor = $('#valor');
 
         this._negociacoesView.update(this._negociacoes);
     }
@@ -26,9 +26,9 @@ class NegociacaoController {
         event.preventDefault();
 
         let negociacao = new Negociacao(
-            new Date(this._inputData.value.replace(/-/g, ',')),
-            parseInt(this._inputQuantidade.value),
-            parseFloat(this._inputValor.value)
+            new Date(this._inputData.val().replace(/-/g, ',')),
+            parseInt(this._inputQuantidade.val()),
+            parseFloat(this._inputValor.val())
         );
 
         this._negociacoes.adiciona(negociacao);
