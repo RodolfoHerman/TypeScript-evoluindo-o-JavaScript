@@ -39,6 +39,8 @@
     <div id="negociacoesView"></div>
 
     <script src="lib/jquery.min.js"></script>
+
+    <!-- Com os imports da ES2015 não precisamos nos preocupar com a ordem de importação dos arquivos
     <script src="js/models/Negociacao.js"></script>
     <script src="js/controllers/NegociacaoCOntroller.js"></script>
     <script src="js/models/Negociacoes.js"></script>
@@ -46,5 +48,20 @@
     <script src="js/views/MensagemView.js"></script>
     <script src="js/views/NegociacoesView.js"></script>
     <script src="js/app.js"></script>
+    system.ts é o carregador de módulos -->
+    <script src="lib/system.js"></script>
+    
+    <!-- Necessário informar para o loader o carro chefe, módulo principal da aplicação 'app.js', para realizar 
+        todas as importações de dependências da aplicação -->
+    <script>
+        System.defaultJSExtensions = true;
+        System.import('js/app.js').catch(err => console.error(err));
+    </script>
+
+    <!-- Obs: o LOADER 'System.import' realiza os imports via requisição AJAX e por este motivo
+    é necessário que a aplicação tenha um servidor rodando. Esse princípio também é utilizado
+    pelo ANGULAR -->
+
+
 </body>
 </html>

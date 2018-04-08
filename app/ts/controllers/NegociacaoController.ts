@@ -1,4 +1,18 @@
-class NegociacaoController {
+//ES 2015 define que todo arquivo JS do projeto é um módulo e através das instruções 
+//import e export importamos e exportamos artefatos respectivamente.
+
+// import { MensagemView } from '../views/MensagemView';
+// import { NegociacoesView } from '../views/NegociacoesView';
+// import { Negociacao } from '../models/Negociacao';
+// import { Negociacoes } from '../models/Negociacoes';
+
+//Utilizar a técnica BARREl (Barril) para deixar o código mais enxuto para exportar.
+//Um barril, ou barrel no inglês é uma maneira de centralizarmos em um único 
+//módulo a importação de outros módulos.
+import { MensagemView, NegociacoesView } from '../views/index';
+import { Negociacao, Negociacoes } from '../models/index';
+
+export class NegociacaoController {
 
     private _inputData: JQuery;
     private _inputQuantidade: JQuery;
