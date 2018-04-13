@@ -5,7 +5,10 @@
         "noEmitOnError": true,
         "noImplicitAny": true,
         //Carregador de MODULOS
-        "module": "system"
+        "module": "system",
+        //Uma boa prática de programação é não permitir valores UNDEFINED e NULL
+        "strictNullChecks": true,
+        "experimentalDecorators": true
     },
     "include": [
         "app/ts/**/*"

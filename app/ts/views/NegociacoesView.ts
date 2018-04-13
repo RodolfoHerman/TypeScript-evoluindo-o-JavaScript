@@ -28,7 +28,7 @@ export class NegociacoesView extends View<Negociacoes> {
                         `
                     ).join('')}
                 </tbody>
-                
+                <--! ESCAPE do SCRIPT <script> alert('oi'); </script> -->
                 <tfoot>
                 </tfoot>
             </table>

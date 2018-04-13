@@ -14,8 +14,15 @@ System.register([], function (exports_1, context_1) {
                 adiciona(negociacao) {
                     this._negociacoes.push(negociacao);
                 }
+                //Como colocamos o 'STRICTNULLCHECKS' e ele não deixa retorna outro valor a não ser
+                //um array do tipo especificado na assinatura da função.
+                //Podemos especificar para a função mais de um tipo de retorno colocando o pipe '|'
+                //Neste caso a função retorna o array ou retorna null 
+                //paraArray(): Array<Negociacao> | null {
                 paraArray() {
-                    //paraArray(): Negociacao[] {
+                    //Ativando o STRICTNULLCHECKS o array vazio [] pode receber
+                    //qualquer tipo de formato, sendo assim é necessário tipa-lo como um array de Negociacao
+                    //return [].concat(this._negociacoes);
                     return [].concat(this._negociacoes);
                 }
             };

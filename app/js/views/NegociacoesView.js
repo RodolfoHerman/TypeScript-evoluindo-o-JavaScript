@@ -32,7 +32,7 @@ System.register(["./View"], function (exports_1, context_1) {
                             </tr>
                         `).join('')}
                 </tbody>
-                
+                <--! ESCAPE do SCRIPT <script> alert('oi'); </script> -->
                 <tfoot>
                 </tfoot>
             </table>
