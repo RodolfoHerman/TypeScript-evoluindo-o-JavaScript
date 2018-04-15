@@ -6,6 +6,9 @@ let negociacaoController = new NegociacaoController();
 
 $('.form').submit(negociacaoController.adiciona.bind(negociacaoController));
 
+$('#botao-importa').click(negociacaoController.importarDados.bind(negociacaoController));
+
+
 //inicialização do compilador:
 //1) npm init (no diret´rotio do projeto)
 //2) é criado o arquivo 'package.json'

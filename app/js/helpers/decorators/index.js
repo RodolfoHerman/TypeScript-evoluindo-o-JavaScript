@@ -1,8 +1,9 @@
-System.register(["./logarTempoDeExecucao", "./domInject"], function (exports_1, context_1) {
+System.register(["./logarTempoDeExecucao", "./domInject", "./throttle"], function (exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var exportedNames_1 = {
-        "domInject": true
+        "domInject": true,
+        "throttle": true
     };
     function exportStar_1(m) {
         var exports = {};
@@ -19,6 +20,11 @@ System.register(["./logarTempoDeExecucao", "./domInject"], function (exports_1, 
             function (domInject_1_1) {
                 exports_1({
                     "domInject": domInject_1_1["domInject"]
+                });
+            },
+            function (throttle_1_1) {
+                exports_1({
+                    "throttle": throttle_1_1["throttle"]
                 });
             }
         ],

@@ -1,0 +1,27 @@
+O método abixo não executa corretamente o preventDeafult()
+
+export function throttle(milissegundos = 500) {
+
+    return function(target: any, propertyKey: string, descriptor: PropertyDescriptor) {
+
+       const metodoOriginal = descriptor.value;
+
+       if(event) event.preventDefault();
+
+       descriptor.value = function(...args: any[]) {
+            let timer = 0;
+            clearInterval(timer);
+            timer = setTimeout(() => metodoOriginal.apply(this, args), milissegundos);
+        }
+
+        return descriptor;
+    }
+}
+
+--> A declaração de let timer não pode estar dentro da função passada para descriptor.value, 
+caso contrário toda vez que o método decorador for chamado uma nova variável será criada, 
+queremos atualizar a mesma em cada chamada, por isso ela deve ficar no escopo de throttle e 
+não do descriptor.
+
+--> A instrução if(event) event.preventDefault(); esta fora do 
+bloco da função passada para descriptor.value.

@@ -12,6 +12,7 @@ System.register(["./controllers/NegociacaoController"], function (exports_1, con
             negociacaoController = new NegociacaoController_1.NegociacaoController();
             //document.querySelector('.form').addEventListener('submit', negociacaoController.adiciona.bind(negociacaoController));
             $('.form').submit(negociacaoController.adiciona.bind(negociacaoController));
+            $('#botao-importa').click(negociacaoController.importarDados.bind(negociacaoController));
             //inicialização do compilador:
             //1) npm init (no diret´rotio do projeto)
             //2) é criado o arquivo 'package.json'
