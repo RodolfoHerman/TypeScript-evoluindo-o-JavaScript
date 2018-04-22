@@ -10,9 +10,10 @@
 //Um barril, ou barrel no inglês é uma maneira de centralizarmos em um único 
 //módulo a importação de outros módulos.
 import { MensagemView, NegociacoesView } from '../views/index';
-import { Negociacao, Negociacoes, NegociacaoParcial } from '../models/index';
+import { Negociacao, Negociacoes, NegociacaoParcial, Imprimivel } from '../models/index';
 import { logarTempoDeExecucao, domInject, throttle } from '../helpers/decorators/index';
 import { NegociacaoService, ResponseHandler } from '../services/index';
+import { imprime } from '../helpers/index';
 
 export class NegociacaoController {
 
@@ -75,6 +76,12 @@ export class NegociacaoController {
 
         this._negociacoes.adiciona(negociacao);
 
+        //Vai dar erro pois o objeto Date() não possui a função para texto implementada
+        //imprime(this._negociacoes, negociacao, new Date());
+
+        //Assinatura do método aceita apenas classes que estende de 'Imprimivel'
+        imprime(this._negociacoes, negociacao);
+
         this._negociacoesView.update(this._negociacoes);
         this._mensagemView.update('Negociaçao adicionada com sucesso!');
     }
@@ -83,6 +90,54 @@ export class NegociacaoController {
 
         return data.getDay() != DiaDaSemana.Domingo && data.getDay() != DiaDaSemana.Sabado;
     }
+
+    @throttle()
+    //Informamos que o método é ASSINCRONO com o 'async', ou seja
+    //ao executar o método ele entende que haverá uma parte em seu escopo que terá uma chamada assincrona 'await'
+    //e quando chegar na chamada assincrona o método entrará em estado de PAUSA, sairá da pilha de execução, e retornará somente quando houver
+    //o retorno da resposta da chamada assincrona 'negociacoesParaImportar'
+    async importarDados_2() {
+     
+        //(Obs: sabemos que uma 'PROMISE' retorna seus dados no THEN, de forma encadeada, ou no CATCH).
+        //No nosso caso, o ASYNC/AWAIT não possui o THEN/CATCH da PROMISE
+        //mas ele é inteligente o bastante para realizar o tratamento da função utilizando o TRY/CATCH. O TRY/CATCH não pode ser utilizado
+        //em códigos assincronos, mas com o SYNC/AWAIT ele entende a instrução TRY/CATCH
+        try {
+
+            //Aqui dá ideia de chamada de um método SINCRONO. O 'await' é inteligente o bastante para extrair
+            //o resultado do 'THEN' da 'PROMISE' do método 'obterNegociacoes', sendo assim podemos 
+            //atribuir o seu resultado direto na variável 'negociacoesParaImportar'.
+            const negociacoesParaImportar = await this._service
+                                .obterNegociacoes((response: Response) => {
+                                                    if(response.ok) {
+
+                                                        return response;
+                                                    } else {
+                                        
+                                                        throw new Error(response.statusText);
+                                                    }
+                                                }
+                                            );
+            
+            //Após a execução e o retorno do resultado do método assincrono acima, 
+            //o método terá seu RESUMO a partir deste ponto
+            const negociacoesJaImportadas = this._negociacoes.paraArray();
+
+            negociacoesParaImportar.filter(
+                (negociacao: Negociacao) => !negociacoesJaImportadas.some(
+                    jaImportado => negociacao.ehIgual(jaImportado)
+                )
+            ).forEach((negociacao: Negociacao) => this._negociacoes.adiciona(negociacao));
+
+            this._negociacoesView.update(this._negociacoes);
+
+        } catch(err) {
+
+            this._mensagemView.update(err.message);
+        }
+
+    }
+
 
     //O método abaixo foi substituido por este pois colocamos a lógica de obter negociações
     //em um service (criamos uma classe para essa responsabilidade)
@@ -130,12 +185,23 @@ export class NegociacaoController {
                     }
                 }
             )
-            .then(negociacoes => {
+            .then(negociacoesParaImportar => {
 
-                negociacoes.forEach((negociacao: Negociacao) => this._negociacoes.adiciona(negociacao));
+                const negociacoesJaImportadas = this._negociacoes.paraArray();
+
+                //Evita de importar negociações já imporatdas na tabela
+                negociacoesParaImportar.filter(
+                    (negociacao: Negociacao) => !negociacoesJaImportadas.some(
+                        jaImportado => negociacao.ehIgual(jaImportado)
+                    )
+                ).forEach((negociacao: Negociacao) => this._negociacoes.adiciona(negociacao));
+
+                //Aplicação do FILTRO acima para evitar importar NEGOCIACOES iguais
+                //negociacoesParaImportar.forEach((negociacao: Negociacao) => this._negociacoes.adiciona(negociacao));
 
                 this._negociacoesView.update(this._negociacoes);
-            });
+            })
+            .catch((err: Error) => this._mensagemView.update(err.message));
 
 
     }

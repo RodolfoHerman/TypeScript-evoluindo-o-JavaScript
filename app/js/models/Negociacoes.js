@@ -5,6 +5,10 @@ System.register([], function (exports_1, context_1) {
     return {
         setters: [],
         execute: function () {
+            ////Melhor abordagem é atrvés de INTERFACE
+            //export class Negociacoes extends Imprimivel {
+            //export class Negociacoes implements Imprimivel, Igualavel<Negociacoes> {
+            //Novo jeito de implementar interface
             Negociacoes = class Negociacoes {
                 constructor() {
                     this._negociacoes = [];
@@ -24,6 +28,15 @@ System.register([], function (exports_1, context_1) {
                     //qualquer tipo de formato, sendo assim é necessário tipa-lo como um array de Negociacao
                     //return [].concat(this._negociacoes);
                     return [].concat(this._negociacoes);
+                }
+                //Implementação do contrato da interface
+                paraTexto() {
+                    console.log("--- Para texto ---");
+                    console.log(JSON.stringify(this._negociacoes));
+                }
+                //Implementação do contrato da interface
+                ehIgual(negociacoes) {
+                    return JSON.stringify(this._negociacoes) == JSON.stringify(negociacoes.paraArray());
                 }
             };
             exports_1("Negociacoes", Negociacoes);
